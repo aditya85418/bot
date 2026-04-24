@@ -1,6 +1,6 @@
 
 from __future__ import annotations
-
+import asyncio
 import re
 import json
 from dataclasses import dataclass
@@ -330,26 +330,30 @@ async def set_qr(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # MAIN
 # =========================
 def main():
-    app = Application.builder().token(BOT_TOKEN).build()
+    async def run_bot():
+        app = Application.builder().token(BOT_TOKEN).build()
 
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("addadmin", add_admin))
-    app.add_handler(CommandHandler("deleteadmin", delete_admin))
-    app.add_handler(CommandHandler("off", off_plan))
-    app.add_handler(CommandHandler("on", on_plan))
-    app.add_handler(CommandHandler("setqr", set_qr))
+        app.add_handler(CommandHandler("start", start))
+        app.add_handler(CommandHandler("addadmin", add_admin))
+        app.add_handler(CommandHandler("deleteadmin", delete_admin))
+        app.add_handler(CommandHandler("off", off_plan))
+        app.add_handler(CommandHandler("on", on_plan))
+        app.add_handler(CommandHandler("setqr", set_qr))
 
-    app.add_handler(CallbackQueryHandler(verify, pattern="verify"))
-    app.add_handler(CallbackQueryHandler(select_plan, pattern="plan_"))
-    app.add_handler(CallbackQueryHandler(admin_action, pattern="approve_|reject_"))
-    app.add_handler(CallbackQueryHandler(handle_post, pattern="^post_"))
+        app.add_handler(CallbackQueryHandler(verify, pattern="verify"))
+        app.add_handler(CallbackQueryHandler(select_plan, pattern="plan_"))
+        app.add_handler(CallbackQueryHandler(admin_action, pattern="approve_|reject_"))
+        app.add_handler(CallbackQueryHandler(handle_post, pattern="^post_"))
 
-    # 🔥 SINGLE PHOTO HANDLER (FIXED)
-    app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
-    app.add_handler(MessageHandler(filters.TEXT, handle_text), group=0)
+        app.add_handler(MessageHandler(filters.PHOTO, handle_photo))
+        app.add_handler(MessageHandler(filters.TEXT, handle_text))
 
-    app.run_polling()
+        await app.initialize()
+        await app.start()
+        await app.updater.start_polling()
+        await app.updater.idle()
 
+    asyncio.run(run_bot())
 
 if __name__ == "__main__":
     keep_alive()
