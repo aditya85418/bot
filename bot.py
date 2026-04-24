@@ -23,7 +23,7 @@ from threading import Thread
 # =========================
 # CONFIG
 # =========================
-BOT_TOKEN = "PASTE_NEW_TOKEN_HERE"
+BOT_TOKEN = "8625545005:AAHDRRzF7Qmf3RRV3x4gkbpLPhN1ZjeqXYU"
 OWNER_ID = 8011957004
 REQUIRED_CHANNEL = "@PlayStoreDealsZone"
 
