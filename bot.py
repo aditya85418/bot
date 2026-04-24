@@ -1,9 +1,11 @@
+
 from __future__ import annotations
 
 import re
 import json
 from dataclasses import dataclass
 from typing import Dict, Optional, List
+from keep_alive import keep_alive
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.constants import ParseMode
@@ -15,10 +17,6 @@ from telegram.ext import (
     MessageHandler,
     filters,
 )
-
-# 🔥 FLASK KEEP ALIVE
-from flask import Flask
-from threading import Thread
 
 # =========================
 # CONFIG
@@ -40,21 +38,6 @@ plan_names = {
     "bt4": "₹1500 → ₹750",
 }
 
-# =========================
-# KEEP ALIVE SERVER
-# =========================
-app_web = Flask('')
-
-@app_web.route('/')
-def home():
-    return "Bot is running ✅"
-
-def run():
-    app_web.run(host='0.0.0.0', port=8080)
-
-def keep_alive():
-    t = Thread(target=run)
-    t.start()
 # =========================
 # CONFIG LOAD
 # =========================
@@ -369,4 +352,5 @@ def main():
 
 
 if __name__ == "__main__":
+    keep_alive()
     main()
