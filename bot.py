@@ -1,5 +1,3 @@
-from flask import Flask
-from threading import Thread
 from __future__ import annotations
 
 import re
@@ -18,10 +16,14 @@ from telegram.ext import (
     filters,
 )
 
+# 🔥 FLASK KEEP ALIVE
+from flask import Flask
+from threading import Thread
+
 # =========================
 # CONFIG
 # =========================
-BOT_TOKEN = "8625545005:AAHDRRzF7Qmf3RRV3x4gkbpLPhN1ZjeqXYU"
+BOT_TOKEN = "PASTE_NEW_TOKEN_HERE"
 OWNER_ID = 8011957004
 REQUIRED_CHANNEL = "@PlayStoreDealsZone"
 
@@ -38,6 +40,21 @@ plan_names = {
     "bt4": "₹1500 → ₹750",
 }
 
+# =========================
+# KEEP ALIVE SERVER
+# =========================
+app_web = Flask('')
+
+@app_web.route('/')
+def home():
+    return "Bot is running ✅"
+
+def run():
+    app_web.run(host='0.0.0.0', port=8080)
+
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
 # =========================
 # CONFIG LOAD
 # =========================
